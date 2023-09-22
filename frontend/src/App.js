@@ -10,6 +10,7 @@ export default function App() {
     setSelectedMovie(movie);
   };
 
+
   return (
     <div className="container">
       <h1>Movie List</h1>
