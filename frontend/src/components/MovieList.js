@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function MovieList({ onMovieClick }) {
   const [movies, setMovies] = useState([]);
-  const baseUrl = process.env.FAIL_TEST || 'http://localhost';
+  const baseUrl = process.env.FAIL_TEST || '';
 
   useEffect(() => {
     axios.get(`${baseUrl}/movies`).then((response) => {

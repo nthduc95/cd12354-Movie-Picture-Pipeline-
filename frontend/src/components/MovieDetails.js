@@ -3,7 +3,7 @@ import axios from 'axios';
 
 function MovieDetail({ movie }) {
   const [details, setDetails] = useState(null);
-  const baseUrl = process.env.FAIL_TEST || 'http://localhost';
+  const baseUrl = process.env.FAIL_TEST || '';
   useEffect(() => {
     axios.get(`${baseUrl}/movies/${movie.id}`).then((response) => {
       setDetails(response.data);
