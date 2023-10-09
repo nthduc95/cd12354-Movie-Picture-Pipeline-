@@ -99,6 +99,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - uses: actions/checkout@v3
       - name: Set environment variable
         run: |
           SHORT_SHA_COMMIT=$(git rev-parse --short HEAD)
