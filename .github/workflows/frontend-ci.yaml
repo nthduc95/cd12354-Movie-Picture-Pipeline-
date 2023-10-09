@@ -36,7 +36,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          npm ci
+          npm install
 
       - name: Run lint
         run: |
@@ -77,12 +77,12 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          npm ci
+          npm install
 
       - name: Run tests
         run: |
           cd frontend
-          npm run test
+          npm test
 
   build:
     runs-on: ubuntu-latest
@@ -99,10 +99,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - uses: actions/checkout@v3
       - name: Set environment variable
         run: |
           SHORT_SHA_COMMIT=$(git rev-parse --short HEAD)
-          echo CONTAINER_RELEASE_IMAGE= ${{ steps.login-ecr.outputs.registry }}/${FRONTEND_REPO}:${GITHUB_REF_NAME}_${SHORT_SHA_COMMIT} >> $GITHUB_ENV
+          echo CONTAINER_RELEASE_IMAGE= ${{ steps.login-ecr.outputs.registry }}/front-end:${SHORT_SHA_COMMIT} >> $GITHUB_ENV
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
@@ -110,3 +111,4 @@ jobs:
           cd frontend
           echo "Build a docker container and push it to ECR"
           docker build -t ${CONTAINER_RELEASE_IMAGE}
+          docker push ${CONTAINER_RELEASE_IMAGE}
