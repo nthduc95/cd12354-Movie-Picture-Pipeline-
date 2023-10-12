@@ -6,6 +6,7 @@ def test_movies_endpoint_returns_200():
     with app.test_client() as client:
         status_code = os.getenv("FAIL_TEST", 200)
         response = client.get("/movies/")
+        print 'test ci'
         assert response.status_code == status_code
 
 
