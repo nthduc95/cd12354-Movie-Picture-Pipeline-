@@ -111,7 +111,7 @@ jobs:
       - name: Set environment variable
         run: |
           SHORT_SHA_COMMIT=$(git rev-parse --short HEAD)
-          echo CONTAINER_FE_RELEASE_IMAGE= ${{ steps.login-ecr.outputs.registry }}/front-end:${SHORT_SHA_COMMIT} >> $GITHUB_ENV
+          echo CONTAINER_FE_RELEASE_IMAGE=${{ steps.login-ecr.outputs.registry }}/frontend:${SHORT_SHA_COMMIT} >> $GITHUB_ENV
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
