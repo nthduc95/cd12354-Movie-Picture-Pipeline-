@@ -1,18 +1,18 @@
-name: Backend  Continuous Integration
+name: Backend Continuous Integration
 on:
   workflow_dispatch:
   pull_request:
     branches:
       - main
     paths:
-      - "starter/backend/**"
+      - "backend/**"
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./starter/backend
+        working-directory: ./backend
 
     steps:
       - name: Checkout
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./starter/backend
+        working-directory: ./backend
 
     steps:
       - name: Checkout
@@ -93,7 +93,7 @@ jobs:
     needs: [lint, test]
     defaults:
       run:
-        working-directory: ./starter/backend
+        working-directory: ./backend
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
