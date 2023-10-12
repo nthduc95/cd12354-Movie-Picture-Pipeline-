@@ -96,6 +96,19 @@ jobs:
         working-directory: ./backend
 
     steps:
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{env.PYTHON_VERSION}}
+
+      - name: Install pipenv
+        run: |
+          pip install pipenv
+
+      - name: Install dependencies
+        run: |
+          pipenv install
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
