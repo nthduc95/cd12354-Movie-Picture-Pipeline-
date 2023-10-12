@@ -93,7 +93,7 @@ jobs:
     needs: [lint, test]
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: ./backend
 
     steps:
       - name: Configure AWS credentials
