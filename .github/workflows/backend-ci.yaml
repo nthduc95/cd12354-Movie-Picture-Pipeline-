@@ -111,13 +111,13 @@ jobs:
       - name: Set environment variable
         run: |
           SHORT_SHA_COMMIT=$(git rev-parse --short HEAD)
-          echo CONTAINER_BE_RELEASE_IMAGE= ${{ steps.login-ecr.outputs.registry }}/backend:${SHORT_SHA_COMMIT} >> $GITHUB_ENV
+          echo CONTAINER_BE_RELEASE_IMAGE=${{ steps.login-ecr.outputs.registry }}/backend:${SHORT_SHA_COMMIT} >> $GITHUB_ENV
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         run: |
           echo "Build a docker container and push it to ECR"
-          docker build -t ${CONTAINER_BE_RELEASE_IMAGE}
+          docker build -t ${CONTAINER_BE_RELEASE_IMAGE} .
           echo "List Docker images"
           docker images
 
