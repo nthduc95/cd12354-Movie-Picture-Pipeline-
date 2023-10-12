@@ -1,11 +1,11 @@
 name: Frontend Continuous Integration
-on:
-  workflow_dispatch:
+on:  
   pull_request:
     branches:
       - main
     paths:
       - "frontend/**"
+  workflow_call:
 
 jobs:
   lint:

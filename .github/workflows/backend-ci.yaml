@@ -1,11 +1,11 @@
 name: Backend Continuous Integration
-on:
-  workflow_dispatch:
+on:  
   pull_request:
     branches:
       - main
     paths:
       - "backend/**"
+  workflow_call:
 
 jobs:
   lint:
