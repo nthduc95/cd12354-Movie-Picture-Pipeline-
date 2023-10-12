@@ -1,7 +1,7 @@
-name: Backend Continuous Integration
+name: Backend Continuous Deployment
 on:
   workflow_dispatch:
-  pull_request:
+  push:
     branches:
       - main
     paths:
@@ -120,6 +120,8 @@ jobs:
           docker build -t ${CONTAINER_BE_RELEASE_IMAGE} .
           echo "List Docker images"
           docker images
+          echo "Push Docker image to ECR"
+          docker push ${CONTAINER_BE_RELEASE_IMAGE}
 
       - name: Cache Docker image
         uses: actions/cache@v3
@@ -128,3 +130,36 @@ jobs:
           key: docker-${{ github.sha }}-frontend
           restore-keys: |
             docker-${{ github.sha }}-
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_ECR }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ECR }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name cluster
+
+      - name: Run init.sh
+        run: ./init.sh || true
+        working-directory: ./setup
+
+      - name: Set Docker image in Kustomize
+        run: kustomize edit set image backend=${CONTAINER_BE_RELEASE_IMAGE}
+        working-directory: ./backend/k8s
+
+      - name: Apply Kubernetes resources
+        run: kustomize build | kubectl apply -f -
+        working-directory: ./backend/k8s
