@@ -149,6 +149,12 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - uses: actions/checkout@v3
+      - name: Set environment variable
+        run: |
+          SHORT_SHA_COMMIT=$(git rev-parse --short HEAD)
+          echo CONTAINER_BE_RELEASE_IMAGE=${{ steps.login-ecr.outputs.registry }}/backend:${SHORT_SHA_COMMIT} >> $GITHUB_ENV
+
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name cluster
 
